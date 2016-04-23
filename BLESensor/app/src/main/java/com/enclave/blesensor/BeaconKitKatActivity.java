@@ -16,37 +16,92 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.enclave.blesensor.adapter.BeaconAdapter;
+import com.enclave.blesensor.entity.TemperatureBeacon;
+
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
-public class BeaconKitKatActivity extends Activity implements BluetoothAdapter.LeScanCallback {
+public class BeaconKitKatActivity extends Activity implements BluetoothAdapter.LeScanCallback{
     private static final String TAG = "BeaconActivity";
-
     private BluetoothAdapter mBluetoothAdapter;
     /* Collect unique devices discovered, keyed by address */
     private HashMap<String, TemperatureBeacon> mBeacons;
-    private BeaconAdapter mAdapter;
+    //private BeaconAdapterdemo mAdapter;
+    private BeaconAdapter mBeaconAdapter;
+    private ExpandableListView expListView;
+    List<TemperatureBeacon> listDataHeader;
+    HashMap<String, List<TemperatureBeacon>> listDataChild;
+    ListView list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_beacon_kit_kat);
+        setContentView(R.layout.listview_expand);
 
         /*
          * We are going to display all the device beacons that we discover
          * in a list, using a custom adapter implementation
          */
-        ListView list = new ListView(this);
-        mAdapter = new BeaconAdapter(this);
-        list.setAdapter(mAdapter);
-        setContentView(list);
+        list = (ListView) findViewById(R.id.listTest);
+
+        // get the listview
+        expListView = (ExpandableListView) findViewById(R.id.lvExp);
+
+        // preparing list data
+        //prepareListData();
+
+        mBeaconAdapter = new BeaconAdapter(this, listDataHeader, listDataChild);
+
+        // setting list adapter
+        expListView.setAdapter(mBeaconAdapter);
+
+        // Listview Group click listener
+        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v,
+                                        int groupPosition, long id) {
+//                 Toast.makeText(getApplicationContext(),
+//                 "Group Clicked " + listDataHeader.get(groupPosition),
+//                 Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+        });
+
+        // Listview Group expanded listener
+        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                //Toast.makeText(getApplicationContext(),
+                //        listDataHeader.get(groupPosition) + " Expanded",
+                //        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Listview Group collasped listener
+        expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                //Toast.makeText(getApplicationContext(),
+                //        listDataHeader.get(groupPosition) + " Collapsed",
+                //        Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        //mAdapter = new BeaconAdapterdemo(this);
+        //list.setAdapter(mAdapter);
+       // setContentView(list);
 
         /*
          * Bluetooth in Android 4.3 is accessed via the BluetoothManager, rather than
@@ -55,8 +110,9 @@ public class BeaconKitKatActivity extends Activity implements BluetoothAdapter.L
         BluetoothManager manager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
         mBluetoothAdapter = manager.getAdapter();
 
-        mBeacons = new HashMap<String, TemperatureBeacon>();
+        mBeacons = new HashMap<>();
     }
+
 
     @Override
     protected void onResume() {
@@ -79,7 +135,7 @@ public class BeaconKitKatActivity extends Activity implements BluetoothAdapter.L
          * side loads to report whether or not the feature exists.
          */
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, "No LE Support.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No LE Support.", Toast.LENGTH_LONG).show();
             finish();
             return;
         }
@@ -112,7 +168,7 @@ public class BeaconKitKatActivity extends Activity implements BluetoothAdapter.L
 
     private void startScan() {
         //Scan for devices advertising the thermometer service
-        mBluetoothAdapter.startLeScan(new UUID[]{TemperatureBeacon.THERM_SERVICE.getUuid()}, this);
+        mBluetoothAdapter.startLeScan(this);
         setProgressBarIndeterminateVisibility(true);
 
         mHandler.postDelayed(mStopRunnable, 5000);
@@ -157,10 +213,13 @@ public class BeaconKitKatActivity extends Activity implements BluetoothAdapter.L
             TemperatureBeacon beacon = (TemperatureBeacon) msg.obj;
             mBeacons.put(beacon.getName(), beacon);
 
-            mAdapter.setNotifyOnChange(false);
-            mAdapter.clear();
-            mAdapter.addAll(mBeacons.values());
-            mAdapter.notifyDataSetChanged();
+            mBeaconAdapter.updateDataSet(mBeacons);
+            mBeaconAdapter.notifyDataSetChanged();
+
+            //mAdapter.setNotifyOnChange(false);
+            //mAdapter.clear();
+            //mAdapter.addAll(mBeacons.values());
+            //mAdapter.notifyDataSetChanged();
         }
     };
 
@@ -169,9 +228,9 @@ public class BeaconKitKatActivity extends Activity implements BluetoothAdapter.L
      * element data in columns, and also varies the text color of each row
      * by the temperature values of the beacon
      */
-    private static class BeaconAdapter extends ArrayAdapter<TemperatureBeacon> {
+    private static class BeaconAdapterdemo extends ArrayAdapter<TemperatureBeacon> {
 
-        public BeaconAdapter(Context context) {
+        public BeaconAdapterdemo(Context context) {
             super(context, 0);
         }
 
@@ -216,6 +275,6 @@ public class BeaconKitKatActivity extends Activity implements BluetoothAdapter.L
 
             return Color.rgb(red, 0, blue);
         }
-    }
 
+    }
 }

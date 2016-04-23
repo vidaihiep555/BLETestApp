@@ -21,6 +21,8 @@ public class AdRecord {
     public static final int TYPE_TRANSMITPOWER = 0xA;
     public static final int TYPE_CONNINTERVAL = 0x12;
     public static final int TYPE_SERVICEDATA = 0x16;
+    public static final int TYPE_MANUFACTURER_SPECIFIC_DATA = 0xFFFFFFFF;
+
 
     /*
      * Read out all the AD structures from the raw scan record
@@ -56,7 +58,7 @@ public class AdRecord {
     }
 
     public static int getServiceDataUuid(AdRecord serviceData) {
-        if (serviceData.mType != TYPE_SERVICEDATA) return -1;
+        if (serviceData.mType != TYPE_MANUFACTURER_SPECIFIC_DATA) return -1;
 
         byte[] raw = serviceData.mData;
         //Find UUID data in byte array
@@ -67,7 +69,7 @@ public class AdRecord {
     }
 
     public static byte[] getServiceData(AdRecord serviceData) {
-        if (serviceData.mType != TYPE_SERVICEDATA) return null;
+        if (serviceData.mType != TYPE_MANUFACTURER_SPECIFIC_DATA) return null;
 
         byte[] raw = serviceData.mData;
         //Chop out the uuid
@@ -111,6 +113,8 @@ public class AdRecord {
                 return "Connect Interval";
             case TYPE_SERVICEDATA:
                 return "Service Data";
+            case TYPE_MANUFACTURER_SPECIFIC_DATA:
+                return "Manufacturer Specific Data";
             default:
                 return "Unknown Structure: " + mType;
         }

@@ -15,7 +15,7 @@ public class MainActivity extends Activity {
     private ListView lvDevice;
     private Context context = MainActivity.this;
     private ArrayList<Device> listDevices = new ArrayList<Device>();
-    private Button btnNewActivity;
+    private Button btnNewActivity, btnTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +30,16 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, Settings.class);
+                startActivity(intent);
+            }
+        });
+
+        btnTest = (Button) findViewById(R.id.btnTest);
+        btnTest.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, BeaconKitKatActivity.class);
                 startActivity(intent);
             }
         });

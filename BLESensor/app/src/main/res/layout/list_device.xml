@@ -9,6 +9,12 @@
         android:text="New Activity"
         android:id="@+id/btnActivity" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TEST"
+        android:id="@+id/btnTest" />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

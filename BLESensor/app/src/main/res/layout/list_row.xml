@@ -20,7 +20,7 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/temperature"
+                android:src="@drawable/temp"
                 android:layout_gravity="center"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -48,7 +48,6 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/celsius"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"/>
         </LinearLayout>
@@ -67,7 +66,7 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/humidity"
+                android:src="@drawable/humi"
                 android:layout_gravity="center"/>
             <TextView
                 android:layout_width="100dp"
@@ -95,7 +94,6 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/percent"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"/>
         </LinearLayout>

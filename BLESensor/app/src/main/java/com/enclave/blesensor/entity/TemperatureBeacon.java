@@ -1,16 +1,18 @@
-package com.enclave.blesensor;
+package com.enclave.blesensor.entity;
 
 import android.annotation.TargetApi;
 import android.bluetooth.le.ScanRecord;
 import android.os.Build;
 import android.os.ParcelUuid;
 
+import com.enclave.blesensor.AdRecord;
+
 import java.util.List;
 
 /**
  * Created by root on 4/15/16.
  */
-public class TemperatureBeacon {
+public class TemperatureBeacon extends Beacon {
     /* Full Bluetooth UUID that defines the Health Thermometer Service */
     public static final ParcelUuid THERM_SERVICE = ParcelUuid.fromString("00001809-0000-1000-8000-00805f9b34fb");
     /* Short-form UUID that defines the Health Thermometer service */
@@ -18,6 +20,8 @@ public class TemperatureBeacon {
 
     private String mName;
     private float mCurrentTemp;
+    private float mCurrentHumidity;
+    private float mCurrentCarbon;
     //Device metadata
     private int mSignal;
     private String mAddress;
@@ -49,12 +53,47 @@ public class TemperatureBeacon {
                 mName = AdRecord.getName(packet);
             }
             //Find the service data record that contains our service's UUID
-            if (packet.getType() == AdRecord.TYPE_SERVICEDATA
-                    && AdRecord.getServiceDataUuid(packet) == UUID_SERVICE_THERMOMETER) {
+            //&& AdRecord.getServiceDataUuid(packet) == UUID_SERVICE_THERMOMETER
+            if (packet.getType() == AdRecord.TYPE_MANUFACTURER_SPECIFIC_DATA) {
                 byte[] data = AdRecord.getServiceData(packet);
-                mCurrentTemp = parseTemp(data);
+                //mCurrentTemp = parseTemp(data);
+
+                if (data.length >= 4) {
+                    mCurrentTemp = bytesToFloat(data[0], data[1], data[2], data[3]);
+                }
+                if (data.length >= 8) {
+                    mCurrentHumidity = bytesToFloat(data[4], data[5], data[6], data[7]);
+                }
+                if (data.length >= 12) {
+                    mCurrentTemp = bytesToFloat(data[8], data[9], data[10], data[11]);
+                }
             }
         }
+    }
+
+    /**
+     * Convert signed bytes to a 32-bit short float value.
+     */
+    private static float bytesToFloat(byte b0, byte b1, byte b2, byte b3) {
+        int mantissa = unsignedToSigned(unsignedByteToInt(b0) + (unsignedByteToInt(b1) << 8) + (unsignedByteToInt(b2) << 16), 24);
+        return (float) (mantissa * Math.pow(10, b3));
+    }
+
+    /**
+     * Convert a signed byte to an unsigned int.
+     */
+    private static int unsignedByteToInt(byte b) {
+        return b & 0xFF;
+    }
+
+    /**
+     * Convert an unsigned integer value to a two's-complement encoded signed value.
+     */
+    private static int unsignedToSigned(int unsigned, int size) {
+        if ((unsigned & (1 << size - 1)) != 0) {
+            unsigned = -1 * ((1 << size - 1) - (unsigned & ((1 << size - 1) - 1)));
+        }
+        return unsigned;
     }
 
     private float parseTemp(byte[] serviceData) {
@@ -83,8 +122,44 @@ public class TemperatureBeacon {
         return mCurrentTemp;
     }
 
+    public float getmCurrentHumidity() {
+        return mCurrentHumidity;
+    }
+
+    public float getmCurrentCarbon() {
+        return mCurrentCarbon;
+    }
+
     public String getAddress() {
         return mAddress;
+    }
+
+    public void setmName(String mName) {
+        this.mName = mName;
+    }
+
+    public void setmCurrentTemp(float mCurrentTemp) {
+        this.mCurrentTemp = mCurrentTemp;
+    }
+
+    public void setmCurrentHumidity(float mCurrentHumidity) {
+        this.mCurrentHumidity = mCurrentHumidity;
+    }
+
+    public void setmCurrentCarbon(float mCurrentCarbon) {
+        this.mCurrentCarbon = mCurrentCarbon;
+    }
+
+    public void setmSignal(int mSignal) {
+        this.mSignal = mSignal;
+    }
+
+    public void setmAddress(String mAddress) {
+        this.mAddress = mAddress;
+    }
+
+    public TemperatureBeacon(){
+
     }
 
     @Override
