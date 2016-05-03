@@ -4,8 +4,7 @@ import android.annotation.TargetApi;
 import android.bluetooth.le.ScanRecord;
 import android.os.Build;
 import android.os.ParcelUuid;
-
-import com.enclave.blesensor.AdRecord;
+import android.util.SparseArray;
 
 import java.util.List;
 
@@ -34,12 +33,24 @@ public class TemperatureBeacon extends Beacon {
 
         mName = record.getDeviceName();
 
-        byte[] data = record.getServiceData(THERM_SERVICE);
-        if (data != null) {
+        byte[] datax = record.getServiceData(THERM_SERVICE);
+        SparseArray<byte[]> data2 = record.getManufacturerSpecificData();
+        byte[] data = data2.get(data2.keyAt(0));
+        if (data.length >= 4) {
+            mCurrentTemp = bytesToFloat(data[0], data[1], data[2], data[3]);
+        }
+        if (data.length >= 8) {
+            mCurrentHumidity = bytesToFloat(data[4], data[5], data[6], data[7]);
+        }
+        if (data.length >= 12) {
+            mCurrentTemp = bytesToFloat(data[8], data[9], data[10], data[11]);
+        }
+
+        /*if (datax != null) {
             mCurrentTemp = parseTemp(data);
         } else {
             mCurrentTemp = 0f;
-        }
+        }*/
     }
 
     /* Builder for pre-Lollipop */

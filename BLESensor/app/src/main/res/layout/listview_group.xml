@@ -2,10 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0288D1"
+    android:background="@color/bg_list_group"
     android:gravity="center"
-    android:layout_weight="0.5"
-    >
+    android:layout_weight="0.5">
 
 
     <TextView
@@ -16,7 +15,7 @@
         android:textSize="25sp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:textColor="#FFFF"
+        android:textColor="@color/tv_address_group"
         android:textStyle="bold"
         android:layout_marginLeft="35dp"
         android:layout_marginTop="40dp"
@@ -26,11 +25,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="-79dmb"
-        android:id="@+id/tvHumi"
+        android:id="@+id/tvSignal"
         android:textSize="25sp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:textColor="#FFFF00"
+        android:textColor="@color/tv_signal_group"
         android:textStyle="bold"
         android:layout_marginRight="10dp"
         android:layout_marginTop="40dp"

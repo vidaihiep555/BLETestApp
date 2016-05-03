@@ -1,4 +1,8 @@
-package com.enclave.blesensor;
+package com.enclave.blesensor.entity;
+
+import android.content.res.Resources;
+
+import com.enclave.blesensor.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,11 +22,10 @@ public class AdRecord {
     public static final int TYPE_UUID128 = 0x7;
     public static final int TYPE_NAME_SHORT = 0x8;
     public static final int TYPE_NAME = 0x9;
-    public static final int TYPE_TRANSMITPOWER = 0xA;
-    public static final int TYPE_CONNINTERVAL = 0x12;
-    public static final int TYPE_SERVICEDATA = 0x16;
+    public static final int TYPE_TRANSMIT_POWER = 0xA;
+    public static final int TYPE_CONN_INTERVAL = 0x12;
+    public static final int TYPE_SERVICE_DATA = 0x16;
     public static final int TYPE_MANUFACTURER_SPECIFIC_DATA = 0xFFFFFFFF;
-
 
     /*
      * Read out all the AD structures from the raw scan record
@@ -100,23 +103,23 @@ public class AdRecord {
     public String toString() {
         switch (mType) {
             case TYPE_FLAGS:
-                return "Flags";
+                return Resources.getSystem().getString(R.string.type_flags);
             case TYPE_NAME_SHORT:
             case TYPE_NAME:
-                return "Name";
+                return Resources.getSystem().getString(R.string.type_name);
             case TYPE_UUID16:
             case TYPE_UUID16_INC:
-                return "UUIDs";
-            case TYPE_TRANSMITPOWER:
-                return "Transmit Power";
-            case TYPE_CONNINTERVAL:
-                return "Connect Interval";
-            case TYPE_SERVICEDATA:
-                return "Service Data";
+                return Resources.getSystem().getString(R.string.type_uuids16_inc);
+            case TYPE_TRANSMIT_POWER:
+                return Resources.getSystem().getString(R.string.type_transmit_power);
+            case TYPE_CONN_INTERVAL:
+                return Resources.getSystem().getString(R.string.type_connect_interval);
+            case TYPE_SERVICE_DATA:
+                return Resources.getSystem().getString(R.string.type_service_data);
             case TYPE_MANUFACTURER_SPECIFIC_DATA:
-                return "Manufacturer Specific Data";
+                return Resources.getSystem().getString(R.string.type_manufacturer_specific_data);
             default:
-                return "Unknown Structure: " + mType;
+                return Resources.getSystem().getString(R.string.unknown_structure) + mType;
         }
     }
 }

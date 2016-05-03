@@ -1,3 +1,32 @@
 <resources>
-    <string name="app_name">BLESensor</string>
+    <string name="app_name">BLE Reader</string>
+
+    <!-- BeanconKitKatActivity -->
+    <string name="no_le_support">No LE Support</string>
+    <string name="ble_setting">bleSetting</string>
+    <string name="scan_time_period">scanTimePeriod</string>
+    <string name="stop_time_period">stopTimePeriod</string>
+
+    <!-- TextView label -->
+    <string name="tv_scan_time_label">Scan Period:&#160;</string>
+    <string name="tv_stop_time_label">Stop Period:&#160;</string>
+    <string name="tv_temperature_label">Temperature</string>
+    <string name="tv_humidity_label">Humidity</string>
+    <string name="tv_time_second_label">s</string>
+
+    <!-- Button label -->
+    <string name="btn_save_setting_label">Save</string>
+
+    <!-- Notification message -->
+    <string name="device_not_found">No nearby Bluetooth LE devices were found.</string>
+
+    <!-- AdRecord type -->
+    <string name="type_flags">Flags</string>
+    <string name="type_name">Name</string>
+    <string name="type_uuids16_inc">UUIDs</string>
+    <string name="type_transmit_power">Transmit Power</string>
+    <string name="type_connect_interval">Connect Interval</string>
+    <string name="type_service_data">Service Data</string>
+    <string name="type_manufacturer_specific_data">Manufacturer Specific Data</string>
+    <string name="unknown_structure">Unknown Structure:&#160;</string>
 </resources>

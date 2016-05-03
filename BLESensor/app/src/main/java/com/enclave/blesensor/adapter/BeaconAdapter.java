@@ -33,43 +33,46 @@ public class BeaconAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition,final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final TemperatureBeacon childText = (TemperatureBeacon) getChild(groupPosition, childPosition);
+    public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        final TemperatureBeacon beacon = (TemperatureBeacon) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_item, null);
+            convertView = infalInflater.inflate(R.layout.listview_item, null);
         }
 
-        TextView txtListChild1 = (TextView) convertView
+        TextView txtTemperature = (TextView) convertView
                 .findViewById(R.id.tvTemperature);
-        txtListChild1.setText(String.valueOf((int) childText.getCurrentTemp()));
+        //Set color based on temperature
+        final int textColor = getTemperatureColor(beacon.getCurrentTemp());
+        txtTemperature.setText(String.format("%.1f\u00B0C", beacon.getCurrentTemp()));
+        txtTemperature.setTextColor(textColor);
 
-        TextView txtListChild2 = (TextView) convertView
-                .findViewById(R.id.tvTemperature);
-        txtListChild2.setText(String.valueOf((int) childText.getmCurrentHumidity()));
+        TextView txtHumidity = (TextView) convertView
+                .findViewById(R.id.tvHumidity);
+        txtHumidity.setText(String.valueOf((int) beacon.getmCurrentHumidity()));
         return convertView;
     }
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        TemperatureBeacon headerTitle = (TemperatureBeacon) getGroup(groupPosition);
+        TemperatureBeacon beacon = (TemperatureBeacon) getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.listview_group, null);
         }
 
-        TextView lblListHeader = (TextView) convertView
+        TextView txtAddress = (TextView) convertView
                 .findViewById(R.id.tvAddress);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
-        lblListHeader.setText(headerTitle.getAddress());
+        txtAddress.setTypeface(null, Typeface.BOLD);
+        txtAddress.setText(beacon.getAddress());
 
-        TextView lblListHeader2 = (TextView) convertView
-                .findViewById(R.id.tvHumi);
-        lblListHeader2.setTypeface(null, Typeface.BOLD);
-        lblListHeader2.setText(String.valueOf(headerTitle.getSignal()));
+        TextView txtSignal = (TextView) convertView
+                .findViewById(R.id.tvSignal);
+        txtSignal.setTypeface(null, Typeface.BOLD);
+        txtSignal.setText(String.format("%ddBm", beacon.getSignal()));
 
         return convertView;
     }
@@ -115,23 +118,17 @@ public class BeaconAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    public void setListDataHeader(List<TemperatureBeacon> listDataHeader) {
-        this.listDataHeader = listDataHeader;
-    }
-
-    public void setListDataChild(HashMap<String, List<TemperatureBeacon>> listDataChild) {
-        this.listDataChild = listDataChild;
-    }
-
-    public static void updateDataSet(HashMap<String, TemperatureBeacon> mBeacons) {
-        for (Map.Entry e: mBeacons.entrySet()) {
+    public void updateDataSet(HashMap<String, TemperatureBeacon> mBeacons) {
+        this.listDataHeader.clear();
+        for (Map.Entry e : mBeacons.entrySet()) {
             TemperatureBeacon beacon = (TemperatureBeacon) e.getValue();
-            //this.l
-            //this.listDataHeader.add(beacon);
+
+            this.listDataHeader.add(beacon);
             List<TemperatureBeacon> tempList = new ArrayList<TemperatureBeacon>();
             tempList.add(beacon);
-            //listDataChild.put(beacon.getAddress(), tempList);
+            this.listDataChild.put(beacon.getAddress(), tempList);
         }
+        int y = 0;
     }
 
     private int getTemperatureColor(float temperature) {

@@ -8,6 +8,7 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -15,15 +16,18 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ExpandActivity">
+
+        <activity android:name=".activity.Launcher" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Settings" android:label="hihi"></activity>
-        <activity android:name=".BeaconKitKatActivity"></activity>
+
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.JellyBeanMR2BLEReader" />
+        <activity android:name=".activity.LollipopBLEReader" />
+
     </application>
 
 </manifest>
